@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RCAC Day View</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        background: #0E0E0E;
+        color: #fff;
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+        min-height: 100vh;
+    }
+
+    .container {
+        max-width: 430px;
+        margin: 0 auto;
+        padding: 20px 24px 40px;
+        min-height: 100vh;
+    }
+
+    .back-link {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 15px;
+        text-decoration: none;
+        display: inline-block;
+        margin-bottom: 16px;
+        letter-spacing: 0.02em;
+        cursor: pointer;
+        background: none;
+        border: none;
+        padding: 0;
+    }
+
+    .back-link:hover {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .nav-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+    }
+
+    .nav-arrow {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.08);
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .nav-arrow:hover {
+        background: rgba(255, 255, 255, 0.12);
+    }
+
+    .nav-arrow svg {
+        width: 18px;
+        height: 18px;
+        fill: none;
+        stroke: #fff;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .today-pill {
+        background: transparent;
+        border: 1px solid #C5A24A;
+        color: #C5A24A;
+        padding: 8px 24px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .today-pill:hover {
+        background: rgba(197, 162, 74, 0.1);
+    }
+
+    .date-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 48px;
+    }
+
+    .day-number {
+        font-size: 180px;
+        font-weight: 700;
+        line-height: 0.85;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .day-label {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.4);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-top: 8px;
+        margin-bottom: 4px;
+    }
+
+    .month-name {
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        color: #fff;
+    }
+
+    .year {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.4);
+        margin-top: 4px;
+        letter-spacing: 0.05em;
+    }
+
+    .weekday {
+        font-size: 18px;
+        font-weight: 400;
+        color: #fff;
+        letter-spacing: 0.02em;
+        padding-top: 140px;
+    }
+
+    .section-title {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.4);
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+    }
+
+    .program-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(197, 162, 74, 0.4);
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .program-card:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(197, 162, 74, 0.6);
+    }
+
+    .program-card.high-school {
+        border-left: 3px solid #8b5cf6;
+    }
+
+    .program-card.intermediate {
+        border-left: 3px solid #10b981;
+    }
+
+    .program-card.youth {
+        border-left: 3px solid #C5A24A;
+    }
+
+    .program-info {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .program-name {
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #fff;
+    }
+
+    .program-time {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.5);
+        letter-spacing: 0.02em;
+    }
+
+    .program-arrow svg {
+        width: 20px;
+        height: 20px;
+        fill: none;
+        stroke: rgba(255, 255, 255, 0.3);
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .add-calendar-btn {
+        width: 100%;
+        background: transparent;
+        border: 1px solid #C5A24A;
+        color: #C5A24A;
+        padding: 18px 24px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 0.2s;
+        margin-top: 24px;
+    }
+
+    .add-calendar-btn:hover {
+        background: rgba(197, 162, 74, 0.1);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    .empty-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+        opacity: 0.3;
+    }
+
+    .programs-container {
+        min-height: 200px;
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="container">
+        <!-- Back link -->
+        <button class="back-link" id="backBtn">‹ Back to Calendar</button>
+
+```
+    <!-- Navigation row -->
+    <div class="nav-row">
+        <button class="nav-arrow" id="prevBtn">
+            <svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+
+        <button class="today-pill" id="todayBtn">TODAY</button>
+
+        <button class="nav-arrow" id="nextBtn">
+            <svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Date section -->
+    <div class="date-section">
+        <div>
+            <div class="day-number" id="dayNumber">20</div>
+            <div class="day-label">DAY</div>
+            <div class="month-name" id="monthName">NOVEMBER</div>
+            <div class="year" id="yearDisplay">2025</div>
+        </div>
+        <div class="weekday" id="weekday">Thu</div>
+    </div>
+
+    <!-- Programs section -->
+    <div>
+        <div class="section-title" id="sectionTitle">TODAY'S PROGRAMS</div>
+        <div class="programs-container" id="programsContainer">
+            <!-- Programs will be rendered here -->
+        </div>
+    </div>
+
+    <!-- Add to calendar button -->
+    <button class="add-calendar-btn" id="addCalendarBtn">+ ADD TO MY CALENDAR</button>
+</div>
+
+<script>
+    // ============================================
+    // PROGRAM DATA (from your calendar system)
+    // ============================================
+    
+    const PROGRAMS = [
+        {
+            id: 'xtreme-team',
+            name: 'Xtreme Team',
+            ageMin: 9,
+            ageMax: 13,
+            category: 'youth',
+            schedule: [
+                { day: 4, startTime: '6:00 PM', endTime: '7:30 PM' }
+            ],
+            startDate: new Date(2025, 8, 4),
+            endDate: new Date(2025, 9, 24)
+        },
+        {
+            id: 'intermediate-tue',
+            name: 'Intermediate — Tuesday Only',
+            ageMin: 9,
+            ageMax: 13,
+            category: 'intermediate',
+            schedule: [
+                { day: 2, startTime: '6:00 PM', endTime: '7:30 PM' }
+            ],
+            startDate: new Date(2025, 8, 16),
+            endDate: new Date(2025, 9, 28)
+        },
+        {
+            id: 'intermediate-mw',
+            name: 'Intermediate M&W',
+            ageMin: 9,
+            ageMax: 13,
+            category: 'intermediate',
+            schedule: [
+                { day: 1, startTime: '6:00 PM', endTime: '7:30 PM' },
+                { day: 3, startTime: '6:00 PM', endTime: '7:30 PM' }
+            ],
+            startDate: new Date(2025, 8, 15),
+            endDate: new Date(2025, 9, 29)
+        },
+        {
+            id: 'hs-sprint-dev',
+            name: 'Sprint Development',
+            ageMin: 14,
+            ageMax: 18,
+            category: 'high-school',
+            schedule: [
+                { day: 2, startTime: '6:00 PM', endTime: '7:30 PM' },
+                { day: 5, startTime: '5:00 PM', endTime: '6:30 PM' }
+            ],
+            startDate: new Date(2025, 8, 8),
+            endDate: new Date(2025, 9, 31)
+        },
+        {
+            id: 'hs-sprint-select',
+            name: 'Sprint Select',
+            ageMin: 14,
+            ageMax: 18,
+            category: 'high-school',
+            schedule: [
+                { day: 1, startTime: '3:05 PM', endTime: '4:30 PM' },
+                { day: 3, startTime: '3:05 PM', endTime: '4:30 PM' },
+                { day: 5, startTime: '3:05 PM', endTime: '4:30 PM' }
+            ],
+            startDate: new Date(2025, 8, 8),
+            endDate: new Date(2025, 11, 19)
+        },
+        {
+            id: 'hs-jumps-select',
+            name: 'Jumps Select',
+            ageMin: 14,
+            ageMax: 18,
+            category: 'high-school',
+            schedule: [
+                { day: 2, startTime: '4:30 PM', endTime: '6:00 PM' },
+                { day: 4, startTime: '4:30 PM', endTime: '6:00 PM' },
+                { day: 0, startTime: '10:00 AM', endTime: '12:00 PM' }
+            ],
+            startDate: new Date(2025, 9, 15),
+            endDate: new Date(2025, 11, 20)
+        },
+        {
+            id: 'hs-cross-country',
+            name: 'Cross Country',
+            ageMin: 14,
+            ageMax: 18,
+            category: 'high-school',
+            schedule: [
+                { day: 2, startTime: '4:00 PM', endTime: '5:30 PM' },
+                { day: 4, startTime: '4:00 PM', endTime: '5:30 PM' },
+                { day: 0, startTime: '9:00 AM', endTime: '10:30 AM' }
+            ],
+            startDate: new Date(2025, 7, 26),
+            endDate: new Date(2025, 10, 21)
+        }
+    ];
+
+    // ============================================
+    // UTILITIES
+    // ============================================
+
+    const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const MONTHS = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 
+                    'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
+
+    function formatDayNumber(date) {
+        return date.getDate().toString().padStart(2, '0');
+    }
+
+    function isToday(date) {
+        const today = new Date();
+        return date.toDateString() === today.toDateString();
+    }
+
+    function isDateInRange(date, start, end) {
+        const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        const s = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+        const e = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+        return d >= s && d <= e;
+    }
+
+    function getProgramsForDate(date) {
+        const dayOfWeek = date.getDay();
+        const programs = [];
+
+        PROGRAMS.forEach(program => {
+            if (!isDateInRange(date, program.startDate, program.endDate)) {
+                return;
+            }
+
+            program.schedule.forEach(slot => {
+                if (slot.day === dayOfWeek) {
+                    programs.push({
+                        program: program,
+                        startTime: slot.startTime,
+                        endTime: slot.endTime
+                    });
+                }
+            });
+        });
+
+        // Sort by start time
+        programs.sort((a, b) => {
+            const timeA = a.startTime.replace(/[^0-9:]/g, '');
+            const timeB = b.startTime.replace(/[^0-9:]/g, '');
+            return timeA.localeCompare(timeB);
+        });
+
+        return programs;
+    }
+
+    // ============================================
+    // UI RENDERING
+    // ============================================
+
+    let currentDate = new Date();
+
+    function renderDay() {
+        const programs = getProgramsForDate(currentDate);
+
+        // Update date display
+        document.getElementById('dayNumber').textContent = formatDayNumber(currentDate);
+        document.getElementById('monthName').textContent = MONTHS[currentDate.getMonth()];
+        document.getElementById('yearDisplay').textContent = currentDate.getFullYear();
+        document.getElementById('weekday').textContent = WEEKDAYS[currentDate.getDay()];
+        document.getElementById('sectionTitle').textContent = 
+            isToday(currentDate) ? "TODAY'S PROGRAMS" : "PROGRAMS";
+
+        // Render programs
+        const container = document.getElementById('programsContainer');
+        
+        if (programs.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">📅</div>
+                    <div>No programs scheduled for this day</div>
+                </div>
+            `;
+            document.getElementById('addCalendarBtn').style.display = 'none';
+        } else {
+            container.innerHTML = programs.map(p => `
+                <div class="program-card ${p.program.category}">
+                    <div class="program-info">
+                        <div class="program-name">${p.program.name}</div>
+                        <div class="program-time">${p.startTime} - ${p.endTime}</div>
+                    </div>
+                    <div class="program-arrow">
+                        <svg viewBox="0 0 24 24">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </div>
+                </div>
+            `).join('');
+            document.getElementById('addCalendarBtn').style.display = 'block';
+        }
+    }
+
+    function changeDay(offset) {
+        currentDate = new Date(currentDate);
+        currentDate.setDate(currentDate.getDate() + offset);
+        renderDay();
+    }
+
+    function goToToday() {
+        currentDate = new Date();
+        renderDay();
+    }
+
+    // ============================================
+    // EVENT LISTENERS
+    // ============================================
+
+    document.getElementById('prevBtn').addEventListener('click', () => changeDay(-1));
+    document.getElementById('nextBtn').addEventListener('click', () => changeDay(1));
+    document.getElementById('todayBtn').addEventListener('click', goToToday);
+    document.getElementById('backBtn').addEventListener('click', () => {
+        alert('Back to calendar clicked');
+    });
+    document.getElementById('addCalendarBtn').addEventListener('click', () => {
+        const programs = getProgramsForDate(currentDate);
+        alert(`Adding ${programs.length} program(s) to calendar`);
+    });
+
+    // Initial render
+    renderDay();
+</script>
+```
+
+</body>
+</html>
