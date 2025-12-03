@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RCAC Mobile Calendar</title>
+    <style>
+        /* ============================================
+           BASE STYLES - From Day view
+           ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* DAY VIEW: Background color #0E0E0E and SF Pro Display font */
+        body {
+            background: #0E0E0E;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+            min-height: 100vh;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        /* MOBILE CALENDAR: Light theme support */
+        body[data-theme="light"] {
+            background: #f5f5f5;
+            color: #212529;
+        }
+
+        /* DAY VIEW: Container max-width 430px, centered with specific padding */
+        .container {
+            max-width: 430px;
+            margin: 0 auto;
+            padding: 20px 24px 40px;
+            min-height: 100vh;
+        }
+
+        /* ============================================
+           BACK LINK - From Day view
+           ============================================ */
+        .back-link {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 15px;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 16px;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .back-link:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        body[data-theme="light"] .back-link {
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        body[data-theme="light"] .back-link:hover {
+            color: rgba(0, 0, 0, 0.8);
+        }
+
+        /* ============================================
+           NAVIGATION ROW - From Day view styling
+           ============================================ */
+        .nav-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        /* DAY VIEW: Circular 40px navigation arrows */
+        .nav-arrow {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .nav-arrow:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        body[data-theme="light"] .nav-arrow {
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        body[data-theme="light"] .nav-arrow:hover {
+            background: rgba(0, 0, 0, 0.12);
+        }
+
+        .nav-arrow svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: #fff;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        body[data-theme="light"] .nav-arrow svg {
+            stroke: #212529;
+        }
+
+        /* DAY VIEW: Today pill button with gold accent #C5A24A */
+        .today-pill {
+            background: transparent;
+            border: 1px solid #C5A24A;
+            color: #C5A24A;
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .today-pill:hover {
+            background: rgba(197, 162, 74, 0.1);
+        }
+
+        /* ============================================
+           POSTER-STYLE DATE DISPLAY - From Day view
+           ============================================ */
+        /* DAY VIEW: Large poster-style month/year display */
+        .date-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .month-name {
+            font-size: 72px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #fff;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        body[data-theme="light"] .month-name {
+            color: #212529;
+        }
+
+        .year-display {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 0.05em;
+        }
+
+        body[data-theme="light"] .year-display {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        /* ============================================
+           THEME TOGGLE - From Mobile Calendar
+           ============================================ */
+        /* MOBILE CALENDAR: Theme toggle functionality */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        body[data-theme="light"] .theme-toggle {
+            background: rgba(197, 162, 74, 0.15);
+            border: 1px solid rgba(197, 162, 74, 0.25);
+        }
+
+        body[data-theme="light"] .theme-toggle:hover {
+            background: rgba(197, 162, 74, 0.25);
+        }
+
+        .theme-icon {
+            font-size: 20px;
+        }
+
+        /* ============================================
+           FILTERS SECTION - Mobile Calendar functionality with Day view styling
+           ============================================ */
+        /* MOBILE CALENDAR: Collapsible filters functionality */
+        .filters-toggle {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: inherit;
+        }
+
+        .filters-toggle:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        body[data-theme="light"] .filters-toggle {
+            background: rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: #212529;
+        }
+
+        body[data-theme="light"] .filters-toggle:hover {
+            background: rgba(0, 0, 0, 0.06);
+        }
+
+        .filter-icon {
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .filter-icon.expanded {
+            transform: rotate(180deg);
+        }
+
+        .filters-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            margin-bottom: 16px;
+        }
+
+        .filters-panel.show {
+            max-height: 800px;
+        }
+
+        .filters-content {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        body[data-theme="light"] .filters-content {
+            background: rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-section {
+            margin-bottom: 20px;
+        }
+
+        .filter-section:last-child {
+            margin-bottom: 0;
+        }
+
+        /* DAY VIEW: Section title styling */
+        .filter-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        body[data-theme="light"] .filter-label {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        body[data-theme="light"] .category-header {
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            color: #212529;
+        }
+
+        .color-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+
+        .program-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            padding-left: 30px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        body[data-theme="light"] .program-item {
+            color: rgba(0, 0, 0, 0.7);
+        }
+
+        .program-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .program-color-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* MOBILE CALENDAR: Search input functionality */
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        body[data-theme="light"] .search-input {
+            background: rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: #212529;
+        }
+
+        body[data-theme="light"] .search-input::placeholder {
+            color: rgba(0, 0, 0, 0.4);
+        }
+
+        /* ============================================
+           CALENDAR GRID - Mobile Calendar functionality with Day view styling
+           ============================================ */
+        .calendar-section {
+            margin-bottom: 40px;
+        }
+
+        /* MOBILE CALENDAR: Calendar grid structure */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        body[data-theme="light"] .calendar-grid {
+            background: rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .day-header {
+            background: rgba(255, 255, 255, 0.04);
+            padding: 10px 4px;
+            text-align: center;
+            font-size: 10px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        body[data-theme="light"] .day-header {
+            background: rgba(0, 0, 0, 0.04);
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        .calendar-day {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 8px 4px;
+            min-height: 90px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        body[data-theme="light"] .calendar-day {
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .calendar-day.other-month {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        body[data-theme="light"] .calendar-day.other-month {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .calendar-day.other-month .day-number {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        body[data-theme="light"] .calendar-day.other-month .day-number {
+            color: rgba(0, 0, 0, 0.3);
+        }
+
+        /* DAY VIEW: Today highlighting with gold accent */
+        .calendar-day.today {
+            background: rgba(197, 162, 74, 0.15);
+            border: 2px solid rgba(197, 162, 74, 0.4);
+        }
+
+        body[data-theme="light"] .calendar-day.today {
+            background: rgba(197, 162, 74, 0.1);
+            border: 2px solid rgba(197, 162, 74, 0.5);
+        }
+
+        .day-number {
+            font-size: 12px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 4px;
+            text-align: center;
+        }
+
+        body[data-theme="light"] .day-number {
+            color: #212529;
+        }
+
+        /* DAY VIEW: Program card styling adapted for calendar events */
+        .event {
+            font-size: 8px;
+            padding: 4px 5px;
+            margin: 3px 0;
+            border-radius: 6px;
+            color: white;
+            font-weight: 600;
+            line-height: 1.2;
+            display: block;
+            transition: all 0.2s ease;
+        }
+
+        .event:hover {
+            transform: translateY(-1px);
+        }
+
+        /* ============================================
+           EVENT COLORS - Day view program card colors
+           ============================================ */
+        /* DAY VIEW: Youth program - gold accent #C5A24A */
+        .xtreme-team {
+            background: linear-gradient(135deg, #BB8B2A 0%, #9d7322 100%);
+            border-left: 3px solid #C5A24A;
+        }
+
+        /* DAY VIEW: Intermediate programs - green accent #10b981 */
+        .intermediate-tue {
+            background: linear-gradient(135deg, #D4A638 0%, #b89139 100%);
+            border-left: 3px solid #10b981;
+        }
+
+        .intermediate-mw {
+            background: linear-gradient(135deg, #E4C573 0%, #d4a574 100%);
+            border-left: 3px solid #10b981;
+        }
+
+        /* DAY VIEW: High school programs - purple accent #8b5cf6 */
+        .sprint-dev {
+            background: linear-gradient(135deg, #1C2A3A 0%, #0f1620 100%);
+            border-left: 3px solid #8b5cf6;
+        }
+
+        .sprint-select {
+            background: linear-gradient(135deg, #2B3D52 0%, #1c2a3a 100%);
+            border-left: 3px solid #8b5cf6;
+        }
+
+        .jumps-select {
+            background: linear-gradient(135deg, #3C4E63 0%, #2b3d52 100%);
+            border-left: 3px solid #8b5cf6;
+        }
+
+        .cross-country {
+            background: linear-gradient(135deg, #50637A 0%, #3c4e63 100%);
+            border-left: 3px solid #8b5cf6;
+        }
+
+        /* ============================================
+           RESPONSIVE - Day view breakpoints
+           ============================================ */
+        @media screen and (max-width: 390px) {
+            .container {
+                padding: 16px 16px 32px;
+            }
+
+            .month-name {
+                font-size: 56px;
+            }
+
+            .calendar-day {
+                min-height: 75px;
+                padding: 6px 3px;
+            }
+
+            .event {
+                font-size: 7px;
+                padding: 3px 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- MOBILE CALENDAR: Theme toggle functionality -->
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <span class="theme-icon">◐</span>
+    </button>
+
+    <div class="container">
+        <!-- DAY VIEW: Back link at top -->
+        <button class="back-link" id="backBtn">‹ Back to Calendar</button>
+
+        <!-- DAY VIEW: Navigation row with circular arrows and today pill -->
+        <div class="nav-row">
+            <button class="nav-arrow" id="prevBtn" onclick="changeMonth(-1)">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+
+            <button class="today-pill" id="todayBtn" onclick="goToToday()">TODAY</button>
+
+            <button class="nav-arrow" id="nextBtn" onclick="changeMonth(1)">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+        </div>
+
+        <!-- DAY VIEW: Poster-style large month/year display -->
+        <div class="date-header">
+            <div class="month-name" id="monthName">JANUARY</div>
+            <div class="year-display" id="yearDisplay">2025</div>
+        </div>
+
+        <!-- MOBILE CALENDAR: Collapsible filters toggle -->
+        <button class="filters-toggle" onclick="toggleFilters()">
+            <span>Filters & Search</span>
+            <span class="filter-icon" id="filterIcon">▼</span>
+        </button>
+
+        <!-- MOBILE CALENDAR: Filters panel with checkboxes and search -->
+        <div class="filters-panel" id="filtersPanel">
+            <div class="filters-content">
+                <!-- MOBILE CALENDAR: Search functionality -->
+                <div class="filter-section">
+                    <div class="filter-label">Search Programs</div>
+                    <input type="text" class="search-input" id="searchInput"
+                           placeholder="e.g., Sprint, Xtreme, Jumps..."
+                           onkeyup="searchPrograms()">
+                </div>
+
+                <!-- MOBILE CALENDAR: Youth Programs filter -->
+                <div class="filter-section">
+                    <div class="filter-label">Youth Athletics</div>
+                    <div class="category-header">
+                        <div class="color-indicator" style="background: #C5A24A;"></div>
+                        <span>Youth Programs</span>
+                    </div>
+                    <div class="program-item">
+                        <input type="checkbox" id="xtreme" checked onchange="filterEvents()">
+                        <div class="program-color-dot" style="background: #BB8B2A;"></div>
+                        <label for="xtreme">Xtreme Team</label>
+                    </div>
+                    <div class="program-item">
+                        <input type="checkbox" id="int-tue" checked onchange="filterEvents()">
+                        <div class="program-color-dot" style="background: #D4A638;"></div>
+                        <label for="int-tue">Intermediate (Tuesday)</label>
+                    </div>
+                    <div class="program-item">
+                        <input type="checkbox" id="int-mw" checked onchange="filterEvents()">
+                        <div class="program-color-dot" style="background: #E4C573;"></div>
+                        <label for="int-mw">Intermediate (M & W)</label>
+                    </div>
+                </div>
+
+                <!-- MOBILE CALENDAR: High School Programs filter -->
+                <div class="filter-section">
+                    <div class="filter-label">High School</div>
+                    <div class="category-header">
+                        <div class="color-indicator" style="background: #8b5cf6;"></div>
+                        <span>High School Programs</span>
+                    </div>
+                    <div class="program-item">
+                        <input type="checkbox" id="sprint-dev" checked onchange="filterEvents()">
+                        <div class="program-color-dot" style="background: #1C2A3A;"></div>
+                        <label for="sprint-dev">Sprint Development</label>
+                    </div>
+                    <div class="program-item">
+                        <input type="checkbox" id="sprint-sel" checked onchange="filterEvents()">
+                        <div class="program-color-dot" style="background: #2B3D52;"></div>
+                        <label for="sprint-sel">Sprint Select</label>
+                    </div>
+                    <div class="program-item">
+                        <input type="checkbox" id="jumps" checked onchange="filterEvents()">
+                        <div class="program-color-dot" style="background: #3C4E63;"></div>
+                        <label for="jumps">Jumps Select</label>
+                    </div>
+                    <div class="program-item">
+                        <input type="checkbox" id="xc" checked onchange="filterEvents()">
+                        <div class="program-color-dot" style="background: #50637A;"></div>
+                        <label for="xc">Cross Country</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MOBILE CALENDAR: Calendar grid with full month display -->
+        <div class="calendar-section">
+            <div class="calendar-grid" id="calendar"></div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // PROGRAM DATA - Mobile Calendar full program schedules
+        // ============================================
+
+        const PROGRAMS = [
+            {
+                id: 'xtreme-team',
+                name: 'Xtreme Team',
+                ageMin: 9,
+                ageMax: 13,
+                category: 'youth',
+                schedule: [
+                    { day: 4, startTime: '6:00 PM', endTime: '7:30 PM' }
+                ],
+                startDate: new Date(2025, 8, 4),
+                endDate: new Date(2025, 9, 24)
+            },
+            {
+                id: 'intermediate-tue',
+                name: 'Intermediate — Tuesday Only',
+                ageMin: 9,
+                ageMax: 13,
+                category: 'intermediate',
+                schedule: [
+                    { day: 2, startTime: '6:00 PM', endTime: '7:30 PM' }
+                ],
+                startDate: new Date(2025, 8, 16),
+                endDate: new Date(2025, 9, 28)
+            },
+            {
+                id: 'intermediate-mw',
+                name: 'Intermediate M&W',
+                ageMin: 9,
+                ageMax: 13,
+                category: 'intermediate',
+                schedule: [
+                    { day: 1, startTime: '6:00 PM', endTime: '7:30 PM' },
+                    { day: 3, startTime: '6:00 PM', endTime: '7:30 PM' }
+                ],
+                startDate: new Date(2025, 8, 15),
+                endDate: new Date(2025, 9, 29)
+            },
+            {
+                id: 'sprint-dev',
+                name: 'Sprint Development',
+                ageMin: 14,
+                ageMax: 18,
+                category: 'high-school',
+                schedule: [
+                    { day: 2, startTime: '6:00 PM', endTime: '7:30 PM' },
+                    { day: 5, startTime: '5:00 PM', endTime: '6:30 PM' }
+                ],
+                startDate: new Date(2025, 8, 8),
+                endDate: new Date(2025, 9, 31)
+            },
+            {
+                id: 'sprint-select',
+                name: 'Sprint Select',
+                ageMin: 14,
+                ageMax: 18,
+                category: 'high-school',
+                schedule: [
+                    { day: 1, startTime: '3:05 PM', endTime: '4:30 PM' },
+                    { day: 3, startTime: '3:05 PM', endTime: '4:30 PM' },
+                    { day: 5, startTime: '3:05 PM', endTime: '4:30 PM' }
+                ],
+                startDate: new Date(2025, 8, 8),
+                endDate: new Date(2025, 11, 19)
+            },
+            {
+                id: 'jumps-select',
+                name: 'Jumps Select',
+                ageMin: 14,
+                ageMax: 18,
+                category: 'high-school',
+                schedule: [
+                    { day: 2, startTime: '4:30 PM', endTime: '6:00 PM' },
+                    { day: 4, startTime: '4:30 PM', endTime: '6:00 PM' },
+                    { day: 6, startTime: '10:00 AM', endTime: '12:00 PM' }
+                ],
+                startDate: new Date(2025, 9, 15),
+                endDate: new Date(2025, 11, 20)
+            },
+            {
+                id: 'cross-country',
+                name: 'Cross Country',
+                ageMin: 14,
+                ageMax: 18,
+                category: 'high-school',
+                schedule: [
+                    { day: 2, startTime: '4:00 PM', endTime: '5:30 PM' },
+                    { day: 4, startTime: '4:00 PM', endTime: '5:30 PM' },
+                    { day: 0, startTime: '9:00 AM', endTime: '10:30 AM' }
+                ],
+                startDate: new Date(2025, 7, 26),
+                endDate: new Date(2025, 10, 21)
+            }
+        ];
+
+        // ============================================
+        // THEME MANAGEMENT - Mobile Calendar functionality
+        // ============================================
+
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('rcac-mobile-calendar-theme', newTheme);
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('rcac-mobile-calendar-theme');
+        if (savedTheme) {
+            document.body.setAttribute('data-theme', savedTheme);
+        }
+
+        // ============================================
+        // CALENDAR STATE - Mobile Calendar variables
+        // ============================================
+
+        let currentMonth = 0;
+        let currentYear = 2025;
+        const today = new Date();
+
+        const monthNames = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE',
+                           'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
+        const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+        // MOBILE CALENDAR: Program ID mapping for checkboxes
+        const programMap = {
+            'xtreme': 'xtreme-team',
+            'int-tue': 'intermediate-tue',
+            'int-mw': 'intermediate-mw',
+            'sprint-dev': 'sprint-dev',
+            'sprint-sel': 'sprint-select',
+            'jumps': 'jumps-select',
+            'xc': 'cross-country'
+        };
+
+        // ============================================
+        // FILTERS - Mobile Calendar collapsible panel
+        // ============================================
+
+        function toggleFilters() {
+            const panel = document.getElementById('filtersPanel');
+            const icon = document.getElementById('filterIcon');
+            panel.classList.toggle('show');
+            icon.classList.toggle('expanded');
+        }
+
+        // ============================================
+        // CALENDAR GENERATION - Mobile Calendar core function
+        // ============================================
+
+        function generateCalendar(month, year) {
+            const calendar = document.getElementById('calendar');
+            calendar.innerHTML = '';
+
+            // Day headers
+            dayNames.forEach(day => {
+                const header = document.createElement('div');
+                header.className = 'day-header';
+                header.textContent = day;
+                calendar.appendChild(header);
+            });
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+            // Previous month days
+            for (let i = firstDay - 1; i >= 0; i--) {
+                const dayDiv = createDayCell(daysInPrevMonth - i, month - 1, year, true);
+                calendar.appendChild(dayDiv);
+            }
+
+            // Current month days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayDiv = createDayCell(day, month, year, false);
+                calendar.appendChild(dayDiv);
+            }
+
+            // Next month days to complete grid
+            const totalCells = calendar.children.length - 7;
+            const remainingCells = (Math.ceil(totalCells / 7) * 7) - totalCells;
+            for (let day = 1; day <= remainingCells; day++) {
+                const dayDiv = createDayCell(day, month + 1, year, true);
+                calendar.appendChild(dayDiv);
+            }
+
+            // Update header display
+            document.getElementById('monthName').textContent = monthNames[month];
+            document.getElementById('yearDisplay').textContent = year;
+
+            // Apply current filter state
+            filterEvents();
+        }
+
+        // ============================================
+        // DAY CELL CREATION - Mobile Calendar with Day view styling
+        // ============================================
+
+        function createDayCell(day, month, year, isOtherMonth) {
+            const dayDiv = document.createElement('div');
+            dayDiv.className = 'calendar-day';
+            if (isOtherMonth) dayDiv.classList.add('other-month');
+
+            const cellDate = new Date(year, month, day);
+
+            // MOBILE CALENDAR: Today highlighting
+            if (cellDate.toDateString() === today.toDateString()) {
+                dayDiv.classList.add('today');
+            }
+
+            dayDiv.innerHTML = `<div class="day-number">${day}</div>`;
+
+            // Add events only for current month days
+            if (!isOtherMonth) {
+                const dayOfWeek = cellDate.getDay();
+                const events = getEventsForDay(dayOfWeek, cellDate);
+                events.forEach(event => {
+                    dayDiv.innerHTML += event;
+                });
+            }
+
+            return dayDiv;
+        }
+
+        // ============================================
+        // EVENT RETRIEVAL - Mobile Calendar date range validation
+        // ============================================
+
+        function getEventsForDay(dayOfWeek, date) {
+            const events = [];
+
+            PROGRAMS.forEach(program => {
+                // MOBILE CALENDAR: Check if date is within program range
+                if (!isDateInRange(date, program.startDate, program.endDate)) {
+                    return;
+                }
+
+                program.schedule.forEach(slot => {
+                    if (slot.day === dayOfWeek) {
+                        const className = program.id.replace('-', '-');
+                        const checkboxId = Object.keys(programMap).find(key => programMap[key] === program.id);
+                        const displayName = program.name.replace('—', '').replace('&', '&');
+
+                        // DAY VIEW: Event cards with program styling
+                        events.push(
+                            `<div class="event ${className}" data-program="${checkboxId}">${displayName}</div>`
+                        );
+                    }
+                });
+            });
+
+            return events;
+        }
+
+        // MOBILE CALENDAR: Date range validation function
+        function isDateInRange(date, start, end) {
+            const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            const s = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+            const e = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+            return d >= s && d <= e;
+        }
+
+        // ============================================
+        // FILTER EVENTS - Mobile Calendar checkbox filtering
+        // ============================================
+
+        function filterEvents() {
+            const checkboxes = document.querySelectorAll('.program-item input[type="checkbox"]');
+            const activePrograms = new Set();
+
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    activePrograms.add(cb.id);
+                }
+            });
+
+            const allEvents = document.querySelectorAll('.event');
+            allEvents.forEach(event => {
+                const program = event.getAttribute('data-program');
+                if (activePrograms.has(program)) {
+                    event.style.display = 'block';
+                } else {
+                    event.style.display = 'none';
+                }
+            });
+        }
+
+        // ============================================
+        // SEARCH - Mobile Calendar search functionality
+        // ============================================
+
+        function searchPrograms() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const programItems = document.querySelectorAll('.program-item');
+
+            programItems.forEach(item => {
+                const label = item.querySelector('label').textContent.toLowerCase();
+                if (label.includes(searchTerm) || searchTerm === '') {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // ============================================
+        // NAVIGATION - Mobile Calendar month switching
+        // ============================================
+
+        function changeMonth(direction) {
+            currentMonth += direction;
+
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            } else if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+
+            generateCalendar(currentMonth, currentYear);
+        }
+
+        function goToToday() {
+            currentMonth = today.getMonth();
+            currentYear = today.getFullYear();
+            generateCalendar(currentMonth, currentYear);
+        }
+
+        // ============================================
+        // BACK BUTTON - Adjustment for calendar context
+        // ============================================
+
+        document.getElementById('backBtn').addEventListener('click', () => {
+            // Navigate back or show alert
+            alert('Back to main navigation');
+        });
+
+        // ============================================
+        // INITIALIZATION - Mobile Calendar startup
+        // ============================================
+
+        // Initialize calendar to current month
+        currentMonth = today.getMonth();
+        currentYear = today.getFullYear();
+        generateCalendar(currentMonth, currentYear);
+    </script>
+</body>
+</html>
