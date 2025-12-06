@@ -661,103 +661,102 @@
 
     <script>
         // ============================================
-        // PROGRAM DATA - Mobile Calendar full program schedules
+        // PROGRAM DATA - Updated with user's exact dataset
         // ============================================
 
         const PROGRAMS = [
             {
                 id: 'xtreme-team',
-                name: 'Xtreme Team',
-                ageMin: 9,
-                ageMax: 13,
-                category: 'youth',
-                schedule: [
-                    { day: 4, startTime: '6:00 PM', endTime: '7:30 PM' }
-                ],
-                startDate: new Date(2025, 8, 4),
-                endDate: new Date(2025, 9, 24)
+                program: "Xtreme Team",
+                price: 185,
+                start_date: "2024-09-04",
+                end_date: "2024-10-24",
+                ages: "9–13",
+                days: ["Thursday"],
+                time: "6:00 PM",
+                location: "Gryphon Field House"
             },
             {
                 id: 'intermediate-tue',
-                name: 'Intermediate — Tuesday Only',
-                ageMin: 9,
-                ageMax: 13,
-                category: 'intermediate',
-                schedule: [
-                    { day: 2, startTime: '6:00 PM', endTime: '7:30 PM' }
-                ],
-                startDate: new Date(2025, 8, 16),
-                endDate: new Date(2025, 9, 28)
+                program: "Intermediate — Tuesday Only",
+                price: 185,
+                start_date: "2024-09-16",
+                end_date: "2024-10-28",
+                ages: "9–13",
+                days: ["Tuesday"],
+                time: "6:00 PM",
+                location: "Gryphon Field House"
             },
             {
                 id: 'intermediate-mw',
-                name: 'Intermediate M&W',
-                ageMin: 9,
-                ageMax: 13,
-                category: 'intermediate',
-                schedule: [
-                    { day: 1, startTime: '6:00 PM', endTime: '7:30 PM' },
-                    { day: 3, startTime: '6:00 PM', endTime: '7:30 PM' }
-                ],
-                startDate: new Date(2025, 8, 15),
-                endDate: new Date(2025, 9, 29)
+                program: "Intermediate — Monday & Wednesday",
+                price: 300,
+                start_date: "2024-09-15",
+                end_date: "2024-10-29",
+                ages: "9–13",
+                days: ["Monday", "Wednesday"],
+                time: "6:00–6:15 PM",
+                location: "Gryphon Field House"
             },
             {
                 id: 'sprint-dev',
-                name: 'Sprint Development',
-                ageMin: 14,
-                ageMax: 18,
-                category: 'high-school',
-                schedule: [
-                    { day: 2, startTime: '6:00 PM', endTime: '7:30 PM' },
-                    { day: 5, startTime: '5:00 PM', endTime: '6:30 PM' }
-                ],
-                startDate: new Date(2025, 8, 8),
-                endDate: new Date(2025, 9, 31)
+                program: "High School Sprint Development",
+                price: 450,
+                start_date: "2024-09-08",
+                end_date: "2024-10-31",
+                ages: "14–18",
+                days: ["Tuesday", "Friday"],
+                time: "Tuesday @ 6:00 PM, Friday @ 5:00 PM",
+                location: "Gryphon Field House"
             },
             {
                 id: 'sprint-select',
-                name: 'Sprint Select',
-                ageMin: 14,
-                ageMax: 18,
-                category: 'high-school',
-                schedule: [
-                    { day: 1, startTime: '3:05 PM', endTime: '4:30 PM' },
-                    { day: 3, startTime: '3:05 PM', endTime: '4:30 PM' },
-                    { day: 5, startTime: '3:05 PM', endTime: '4:30 PM' }
-                ],
-                startDate: new Date(2025, 8, 8),
-                endDate: new Date(2025, 11, 19)
+                program: "High School Sprint Select",
+                price: 500,
+                start_date: "2024-09-08",
+                end_date: "2024-12-19",
+                ages: "14–18+",
+                days: ["Monday", "Wednesday", "Friday"],
+                time: "3:05 PM",
+                location: "Gryphon Field House"
             },
             {
                 id: 'jumps-select',
-                name: 'Jumps Select',
-                ageMin: 14,
-                ageMax: 18,
-                category: 'high-school',
-                schedule: [
-                    { day: 2, startTime: '4:30 PM', endTime: '6:00 PM' },
-                    { day: 4, startTime: '4:30 PM', endTime: '6:00 PM' },
-                    { day: 6, startTime: '10:00 AM', endTime: '12:00 PM' }
-                ],
-                startDate: new Date(2025, 9, 15),
-                endDate: new Date(2025, 11, 20)
+                program: "High School Jumps Select",
+                price: 360,
+                start_date: "2024-10-15",
+                end_date: "2024-12-20",
+                ages: "14–18+",
+                days: ["Tuesday", "Thursday", "Sunday"],
+                time: "Times vary",
+                location: "Gryphon Field House"
             },
             {
                 id: 'cross-country',
-                name: 'Cross Country',
-                ageMin: 14,
-                ageMax: 18,
-                category: 'high-school',
-                schedule: [
-                    { day: 2, startTime: '4:00 PM', endTime: '5:30 PM' },
-                    { day: 4, startTime: '4:00 PM', endTime: '5:30 PM' },
-                    { day: 0, startTime: '9:00 AM', endTime: '10:30 AM' }
-                ],
-                startDate: new Date(2025, 7, 26),
-                endDate: new Date(2025, 10, 21)
+                program: "High School Cross Country",
+                price: 300,
+                start_date: "2024-08-26",
+                end_date: "2025-08-21",
+                ages: "14–18+",
+                days: ["Tuesday", "Thursday", "Sunday"],
+                time: "Times vary",
+                location: "Gryphon Field House"
             }
         ];
+
+        // ============================================
+        // DAY NAME TO NUMBER CONVERSION
+        // ============================================
+
+        const DAY_MAP = {
+            'Sunday': 0,
+            'Monday': 1,
+            'Tuesday': 2,
+            'Wednesday': 3,
+            'Thursday': 4,
+            'Friday': 5,
+            'Saturday': 6
+        };
 
         // ============================================
         // THEME MANAGEMENT - Mobile Calendar functionality
@@ -782,7 +781,7 @@
         // ============================================
 
         let currentMonth = 0;
-        let currentYear = 2025;
+        let currentYear = 2024;
         const today = new Date();
 
         const monthNames = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE',
@@ -879,8 +878,7 @@
 
             // Add events only for current month days
             if (!isOtherMonth) {
-                const dayOfWeek = cellDate.getDay();
-                const events = getEventsForDay(dayOfWeek, cellDate);
+                const events = getEventsForDay(cellDate);
                 events.forEach(event => {
                     dayDiv.innerHTML += event;
                 });
@@ -890,30 +888,33 @@
         }
 
         // ============================================
-        // EVENT RETRIEVAL - Mobile Calendar date range validation
+        // EVENT RETRIEVAL - Using new program dataset format
         // ============================================
 
-        function getEventsForDay(dayOfWeek, date) {
+        function getEventsForDay(date) {
             const events = [];
+            const dayOfWeekName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][date.getDay()];
 
             PROGRAMS.forEach(program => {
-                // MOBILE CALENDAR: Check if date is within program range
-                if (!isDateInRange(date, program.startDate, program.endDate)) {
+                // Parse start and end dates
+                const startDate = new Date(program.start_date);
+                const endDate = new Date(program.end_date);
+
+                // Check if date is within program range
+                if (!isDateInRange(date, startDate, endDate)) {
                     return;
                 }
 
-                program.schedule.forEach(slot => {
-                    if (slot.day === dayOfWeek) {
-                        const className = program.id.replace('-', '-');
-                        const checkboxId = Object.keys(programMap).find(key => programMap[key] === program.id);
-                        const displayName = program.name.replace('—', '').replace('&', '&');
+                // Check if program runs on this day of week
+                if (program.days.includes(dayOfWeekName)) {
+                    const checkboxId = Object.keys(programMap).find(key => programMap[key] === program.id);
+                    const className = program.id;
 
-                        // DAY VIEW: Event cards with program styling
-                        events.push(
-                            `<div class="event ${className}" data-program="${checkboxId}">${displayName}</div>`
-                        );
-                    }
-                });
+                    // Display program name + time
+                    events.push(
+                        `<div class="event ${className}" data-program="${checkboxId}">${program.program}<br>${program.time}</div>`
+                    );
+                }
             });
 
             return events;
