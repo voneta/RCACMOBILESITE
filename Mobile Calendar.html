@@ -5,16 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RCAC Mobile Calendar</title>
     <style>
-        /* ============================================
-           BASE STYLES - From Day view
-           ============================================ */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* DAY VIEW: Background color #0E0E0E and SF Pro Display font */
+        /* ===== MOBILE-FIRST DESIGN ===== */
         body {
             background: #0E0E0E;
             color: #fff;
@@ -23,13 +20,11 @@
             transition: background-color 0.4s ease, color 0.4s ease;
         }
 
-        /* MOBILE CALENDAR: Light theme support */
         body[data-theme="light"] {
             background: #f5f5f5;
             color: #212529;
         }
 
-        /* DAY VIEW: Container max-width 430px, centered with specific padding */
         .container {
             max-width: 430px;
             margin: 0 auto;
@@ -37,37 +32,41 @@
             min-height: 100vh;
         }
 
-        /* ============================================
-           BACK LINK - From Day view
-           ============================================ */
-        .back-link {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 15px;
-            text-decoration: none;
-            display: inline-block;
-            margin-bottom: 16px;
-            letter-spacing: 0.02em;
-            cursor: pointer;
-            background: none;
-            border: none;
-            padding: 0;
+        /* ===== HEADER - POSTER STYLE ===== */
+        .header {
+            margin-bottom: 24px;
         }
 
-        .back-link:hover {
-            color: rgba(255, 255, 255, 0.8);
+        .month-year-display {
+            text-align: center;
+            margin-bottom: 20px;
         }
 
-        body[data-theme="light"] .back-link {
-            color: rgba(0, 0, 0, 0.6);
+        .month-name {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #fff;
+            line-height: 1;
+            margin-bottom: 8px;
         }
 
-        body[data-theme="light"] .back-link:hover {
-            color: rgba(0, 0, 0, 0.8);
+        body[data-theme="light"] .month-name {
+            color: #212529;
         }
 
-        /* ============================================
-           NAVIGATION ROW - From Day view styling
-           ============================================ */
+        .year-display {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.5);
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        body[data-theme="light"] .year-display {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        /* ===== NAVIGATION ROW ===== */
         .nav-row {
             display: flex;
             justify-content: space-between;
@@ -75,10 +74,9 @@
             margin-bottom: 32px;
         }
 
-        /* DAY VIEW: Circular 40px navigation arrows */
         .nav-arrow {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.08);
             border: none;
@@ -102,8 +100,8 @@
         }
 
         .nav-arrow svg {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             fill: none;
             stroke: #fff;
             stroke-width: 2;
@@ -115,13 +113,12 @@
             stroke: #212529;
         }
 
-        /* DAY VIEW: Today pill button with gold accent #C5A24A */
         .today-pill {
             background: transparent;
             border: 1px solid #C5A24A;
             color: #C5A24A;
-            padding: 8px 24px;
-            border-radius: 20px;
+            padding: 10px 28px;
+            border-radius: 24px;
             font-size: 13px;
             font-weight: 600;
             letter-spacing: 0.08em;
@@ -133,42 +130,7 @@
             background: rgba(197, 162, 74, 0.1);
         }
 
-        /* ============================================
-           POSTER-STYLE DATE DISPLAY - From Day view
-           ============================================ */
-        /* DAY VIEW: Large poster-style month/year display */
-        .date-header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
-        .month-name {
-            font-size: 72px;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            color: #fff;
-            line-height: 1;
-            margin-bottom: 8px;
-        }
-
-        body[data-theme="light"] .month-name {
-            color: #212529;
-        }
-
-        .year-display {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.4);
-            letter-spacing: 0.05em;
-        }
-
-        body[data-theme="light"] .year-display {
-            color: rgba(0, 0, 0, 0.5);
-        }
-
-        /* ============================================
-           THEME TOGGLE - From Mobile Calendar
-           ============================================ */
-        /* MOBILE CALENDAR: Theme toggle functionality */
+        /* ===== THEME TOGGLE ===== */
         .theme-toggle {
             position: fixed;
             top: 20px;
@@ -203,10 +165,7 @@
             font-size: 20px;
         }
 
-        /* ============================================
-           FILTERS SECTION - Mobile Calendar functionality with Day view styling
-           ============================================ */
-        /* MOBILE CALENDAR: Collapsible filters functionality */
+        /* ===== FILTERS SECTION ===== */
         .filters-toggle {
             width: 100%;
             background: rgba(255, 255, 255, 0.04);
@@ -280,12 +239,12 @@
             margin-bottom: 0;
         }
 
-        /* DAY VIEW: Section title styling */
         .filter-label {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.4);
-            letter-spacing: 0.15em;
+            font-size: 10px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
             text-transform: uppercase;
+            letter-spacing: 0.15em;
             margin-bottom: 12px;
         }
 
@@ -350,7 +309,6 @@
             flex-shrink: 0;
         }
 
-        /* MOBILE CALENDAR: Search input functionality */
         .search-input {
             width: 100%;
             padding: 12px 16px;
@@ -376,14 +334,11 @@
             color: rgba(0, 0, 0, 0.4);
         }
 
-        /* ============================================
-           CALENDAR GRID - Mobile Calendar functionality with Day view styling
-           ============================================ */
+        /* ===== CALENDAR GRID ===== */
         .calendar-section {
             margin-bottom: 40px;
         }
 
-        /* MOBILE CALENDAR: Calendar grid structure */
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -443,7 +398,6 @@
             color: rgba(0, 0, 0, 0.3);
         }
 
-        /* DAY VIEW: Today highlighting with gold accent */
         .calendar-day.today {
             background: rgba(197, 162, 74, 0.15);
             border: 2px solid rgba(197, 162, 74, 0.4);
@@ -466,7 +420,6 @@
             color: #212529;
         }
 
-        /* DAY VIEW: Program card styling adapted for calendar events */
         .event {
             font-size: 8px;
             padding: 4px 5px;
@@ -483,16 +436,12 @@
             transform: translateY(-1px);
         }
 
-        /* ============================================
-           EVENT COLORS - Day view program card colors
-           ============================================ */
-        /* DAY VIEW: Youth program - gold accent #C5A24A */
+        /* ===== EVENT COLORS ===== */
         .xtreme-team {
             background: linear-gradient(135deg, #BB8B2A 0%, #9d7322 100%);
             border-left: 3px solid #C5A24A;
         }
 
-        /* DAY VIEW: Intermediate programs - green accent #10b981 */
         .intermediate-tue {
             background: linear-gradient(135deg, #D4A638 0%, #b89139 100%);
             border-left: 3px solid #10b981;
@@ -503,7 +452,6 @@
             border-left: 3px solid #10b981;
         }
 
-        /* DAY VIEW: High school programs - purple accent #8b5cf6 */
         .sprint-dev {
             background: linear-gradient(135deg, #1C2A3A 0%, #0f1620 100%);
             border-left: 3px solid #8b5cf6;
@@ -524,16 +472,14 @@
             border-left: 3px solid #8b5cf6;
         }
 
-        /* ============================================
-           RESPONSIVE - Day view breakpoints
-           ============================================ */
+        /* ===== RESPONSIVE ADJUSTMENTS ===== */
         @media screen and (max-width: 390px) {
             .container {
                 padding: 16px 16px 32px;
             }
 
             .month-name {
-                font-size: 56px;
+                font-size: 40px;
             }
 
             .calendar-day {
@@ -549,16 +495,21 @@
     </style>
 </head>
 <body>
-    <!-- MOBILE CALENDAR: Theme toggle functionality -->
+    <!-- Theme Toggle -->
     <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
         <span class="theme-icon">◐</span>
     </button>
 
     <div class="container">
-        <!-- DAY VIEW: Back link at top -->
-        <button class="back-link" id="backBtn">‹ Back to Calendar</button>
+        <!-- Header -->
+        <div class="header">
+            <div class="month-year-display">
+                <div class="month-name" id="monthName">JANUARY</div>
+                <div class="year-display" id="yearDisplay">2025</div>
+            </div>
+        </div>
 
-        <!-- DAY VIEW: Navigation row with circular arrows and today pill -->
+        <!-- Navigation Row -->
         <div class="nav-row">
             <button class="nav-arrow" id="prevBtn" onclick="changeMonth(-1)">
                 <svg viewBox="0 0 24 24">
@@ -575,22 +526,16 @@
             </button>
         </div>
 
-        <!-- DAY VIEW: Poster-style large month/year display -->
-        <div class="date-header">
-            <div class="month-name" id="monthName">JANUARY</div>
-            <div class="year-display" id="yearDisplay">2025</div>
-        </div>
-
-        <!-- MOBILE CALENDAR: Collapsible filters toggle -->
+        <!-- Filters Toggle -->
         <button class="filters-toggle" onclick="toggleFilters()">
             <span>Filters & Search</span>
             <span class="filter-icon" id="filterIcon">▼</span>
         </button>
 
-        <!-- MOBILE CALENDAR: Filters panel with checkboxes and search -->
+        <!-- Filters Panel -->
         <div class="filters-panel" id="filtersPanel">
             <div class="filters-content">
-                <!-- MOBILE CALENDAR: Search functionality -->
+                <!-- Search -->
                 <div class="filter-section">
                     <div class="filter-label">Search Programs</div>
                     <input type="text" class="search-input" id="searchInput"
@@ -598,7 +543,7 @@
                            onkeyup="searchPrograms()">
                 </div>
 
-                <!-- MOBILE CALENDAR: Youth Programs filter -->
+                <!-- Youth Programs -->
                 <div class="filter-section">
                     <div class="filter-label">Youth Athletics</div>
                     <div class="category-header">
@@ -622,7 +567,7 @@
                     </div>
                 </div>
 
-                <!-- MOBILE CALENDAR: High School Programs filter -->
+                <!-- High School Programs -->
                 <div class="filter-section">
                     <div class="filter-label">High School</div>
                     <div class="category-header">
@@ -653,7 +598,7 @@
             </div>
         </div>
 
-        <!-- MOBILE CALENDAR: Calendar grid with full month display -->
+        <!-- Calendar Grid -->
         <div class="calendar-section">
             <div class="calendar-grid" id="calendar"></div>
         </div>
@@ -661,105 +606,106 @@
 
     <script>
         // ============================================
-        // PROGRAM DATA - Updated with user's exact dataset
+        // PROGRAM DATA
         // ============================================
 
         const PROGRAMS = [
             {
                 id: 'xtreme-team',
-                program: "Xtreme Team",
-                price: 185,
-                start_date: "2025-09-04",
-                end_date: "2025-10-24",
-                ages: "9–13",
-                days: ["Thursday"],
-                time: "6:00 PM",
-                location: "Gryphon Field House"
+                name: 'Xtreme Team',
+                ageMin: 9,
+                ageMax: 13,
+                category: 'youth',
+                schedule: [
+                    { day: 4, startTime: '6:00 PM', endTime: '7:30 PM' }
+                ],
+                startDate: new Date(2025, 8, 4),
+                endDate: new Date(2025, 9, 24)
             },
             {
                 id: 'intermediate-tue',
-                program: "Intermediate — Tuesday Only",
-                price: 185,
-                start_date: "2025-09-16",
-                end_date: "2025-10-28",
-                ages: "9–13",
-                days: ["Tuesday"],
-                time: "6:00 PM",
-                location: "Gryphon Field House"
+                name: 'Intermediate — Tuesday Only',
+                ageMin: 9,
+                ageMax: 13,
+                category: 'intermediate',
+                schedule: [
+                    { day: 2, startTime: '6:00 PM', endTime: '7:30 PM' }
+                ],
+                startDate: new Date(2025, 8, 16),
+                endDate: new Date(2025, 9, 28)
             },
             {
                 id: 'intermediate-mw',
-                program: "Intermediate — Monday & Wednesday",
-                price: 300,
-                start_date: "2025-09-15",
-                end_date: "2025-10-29",
-                ages: "9–13",
-                days: ["Monday", "Wednesday"],
-                time: "6:00–6:15 PM",
-                location: "Gryphon Field House"
+                name: 'Intermediate M&W',
+                ageMin: 9,
+                ageMax: 13,
+                category: 'intermediate',
+                schedule: [
+                    { day: 1, startTime: '6:00 PM', endTime: '7:30 PM' },
+                    { day: 3, startTime: '6:00 PM', endTime: '7:30 PM' }
+                ],
+                startDate: new Date(2025, 8, 15),
+                endDate: new Date(2025, 9, 29)
             },
             {
                 id: 'sprint-dev',
-                program: "High School Sprint Development",
-                price: 450,
-                start_date: "2025-09-08",
-                end_date: "2025-10-31",
-                ages: "14–18",
-                days: ["Tuesday", "Friday"],
-                time: "Tuesday @ 6:00 PM, Friday @ 5:00 PM",
-                location: "Gryphon Field House"
+                name: 'Sprint Development',
+                ageMin: 14,
+                ageMax: 18,
+                category: 'high-school',
+                schedule: [
+                    { day: 2, startTime: '6:00 PM', endTime: '7:30 PM' },
+                    { day: 5, startTime: '5:00 PM', endTime: '6:30 PM' }
+                ],
+                startDate: new Date(2025, 8, 8),
+                endDate: new Date(2025, 9, 31)
             },
             {
                 id: 'sprint-select',
-                program: "High School Sprint Select",
-                price: 500,
-                start_date: "2025-09-08",
-                end_date: "2025-12-19",
-                ages: "14–18+",
-                days: ["Monday", "Wednesday", "Friday"],
-                time: "3:05 PM",
-                location: "Gryphon Field House"
+                name: 'Sprint Select',
+                ageMin: 14,
+                ageMax: 18,
+                category: 'high-school',
+                schedule: [
+                    { day: 1, startTime: '3:05 PM', endTime: '4:30 PM' },
+                    { day: 3, startTime: '3:05 PM', endTime: '4:30 PM' },
+                    { day: 5, startTime: '3:05 PM', endTime: '4:30 PM' }
+                ],
+                startDate: new Date(2025, 8, 8),
+                endDate: new Date(2025, 11, 19)
             },
             {
                 id: 'jumps-select',
-                program: "High School Jumps Select",
-                price: 360,
-                start_date: "2025-10-15",
-                end_date: "2025-12-20",
-                ages: "14–18+",
-                days: ["Tuesday", "Thursday", "Sunday"],
-                time: "Times vary",
-                location: "Gryphon Field House"
+                name: 'Jumps Select',
+                ageMin: 14,
+                ageMax: 18,
+                category: 'high-school',
+                schedule: [
+                    { day: 2, startTime: '4:30 PM', endTime: '6:00 PM' },
+                    { day: 4, startTime: '4:30 PM', endTime: '6:00 PM' },
+                    { day: 6, startTime: '10:00 AM', endTime: '12:00 PM' }
+                ],
+                startDate: new Date(2025, 9, 15),
+                endDate: new Date(2025, 11, 20)
             },
             {
                 id: 'cross-country',
-                program: "High School Cross Country",
-                price: 300,
-                start_date: "2025-08-26",
-                end_date: "2026-08-21",
-                ages: "14–18+",
-                days: ["Tuesday", "Thursday", "Sunday"],
-                time: "Times vary",
-                location: "Gryphon Field House"
+                name: 'Cross Country',
+                ageMin: 14,
+                ageMax: 18,
+                category: 'high-school',
+                schedule: [
+                    { day: 2, startTime: '4:00 PM', endTime: '5:30 PM' },
+                    { day: 4, startTime: '4:00 PM', endTime: '5:30 PM' },
+                    { day: 0, startTime: '9:00 AM', endTime: '10:30 AM' }
+                ],
+                startDate: new Date(2025, 7, 26),
+                endDate: new Date(2025, 10, 21)
             }
         ];
 
         // ============================================
-        // DAY NAME TO NUMBER CONVERSION
-        // ============================================
-
-        const DAY_MAP = {
-            'Sunday': 0,
-            'Monday': 1,
-            'Tuesday': 2,
-            'Wednesday': 3,
-            'Thursday': 4,
-            'Friday': 5,
-            'Saturday': 6
-        };
-
-        // ============================================
-        // THEME MANAGEMENT - Mobile Calendar functionality
+        // THEME MANAGEMENT
         // ============================================
 
         function toggleTheme() {
@@ -777,18 +723,17 @@
         }
 
         // ============================================
-        // CALENDAR STATE - Mobile Calendar variables
+        // CALENDAR FUNCTIONALITY
         // ============================================
 
         let currentMonth = 0;
-        let currentYear = 2024;
+        let currentYear = 2025;
         const today = new Date();
 
         const monthNames = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE',
                            'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
         const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-        // MOBILE CALENDAR: Program ID mapping for checkboxes
         const programMap = {
             'xtreme': 'xtreme-team',
             'int-tue': 'intermediate-tue',
@@ -799,20 +744,12 @@
             'xc': 'cross-country'
         };
 
-        // ============================================
-        // FILTERS - Mobile Calendar collapsible panel
-        // ============================================
-
         function toggleFilters() {
             const panel = document.getElementById('filtersPanel');
             const icon = document.getElementById('filterIcon');
             panel.classList.toggle('show');
             icon.classList.toggle('expanded');
         }
-
-        // ============================================
-        // CALENDAR GENERATION - Mobile Calendar core function
-        // ============================================
 
         function generateCalendar(month, year) {
             const calendar = document.getElementById('calendar');
@@ -842,7 +779,7 @@
                 calendar.appendChild(dayDiv);
             }
 
-            // Next month days to complete grid
+            // Next month days
             const totalCells = calendar.children.length - 7;
             const remainingCells = (Math.ceil(totalCells / 7) * 7) - totalCells;
             for (let day = 1; day <= remainingCells; day++) {
@@ -850,17 +787,12 @@
                 calendar.appendChild(dayDiv);
             }
 
-            // Update header display
+            // Update header
             document.getElementById('monthName').textContent = monthNames[month];
             document.getElementById('yearDisplay').textContent = year;
 
-            // Apply current filter state
             filterEvents();
         }
-
-        // ============================================
-        // DAY CELL CREATION - Mobile Calendar with Day view styling
-        // ============================================
 
         function createDayCell(day, month, year, isOtherMonth) {
             const dayDiv = document.createElement('div');
@@ -868,17 +800,15 @@
             if (isOtherMonth) dayDiv.classList.add('other-month');
 
             const cellDate = new Date(year, month, day);
-
-            // MOBILE CALENDAR: Today highlighting
             if (cellDate.toDateString() === today.toDateString()) {
                 dayDiv.classList.add('today');
             }
 
             dayDiv.innerHTML = `<div class="day-number">${day}</div>`;
 
-            // Add events only for current month days
             if (!isOtherMonth) {
-                const events = getEventsForDay(cellDate);
+                const dayOfWeek = cellDate.getDay();
+                const events = getEventsForDay(dayOfWeek, cellDate);
                 events.forEach(event => {
                     dayDiv.innerHTML += event;
                 });
@@ -887,50 +817,37 @@
             return dayDiv;
         }
 
-        // ============================================
-        // EVENT RETRIEVAL - Using new program dataset format
-        // ============================================
-
-        function getEventsForDay(date) {
+        function getEventsForDay(dayOfWeek, date) {
             const events = [];
-            const dayOfWeekName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][date.getDay()];
 
             PROGRAMS.forEach(program => {
-                // Parse start and end dates
-                const startDate = new Date(program.start_date);
-                const endDate = new Date(program.end_date);
-
                 // Check if date is within program range
-                if (!isDateInRange(date, startDate, endDate)) {
+                if (!isDateInRange(date, program.startDate, program.endDate)) {
                     return;
                 }
 
-                // Check if program runs on this day of week
-                if (program.days.includes(dayOfWeekName)) {
-                    const checkboxId = Object.keys(programMap).find(key => programMap[key] === program.id);
-                    const className = program.id;
+                program.schedule.forEach(slot => {
+                    if (slot.day === dayOfWeek) {
+                        const className = program.id.replace('-', '-');
+                        const checkboxId = Object.keys(programMap).find(key => programMap[key] === program.id);
+                        const displayName = program.name.replace('—', '').replace('&', '&');
 
-                    // Display program name + time
-                    events.push(
-                        `<div class="event ${className}" data-program="${checkboxId}">${program.program}<br>${program.time}</div>`
-                    );
-                }
+                        events.push(
+                            `<div class="event ${className}" data-program="${checkboxId}">${displayName}</div>`
+                        );
+                    }
+                });
             });
 
             return events;
         }
 
-        // MOBILE CALENDAR: Date range validation function
         function isDateInRange(date, start, end) {
             const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
             const s = new Date(start.getFullYear(), start.getMonth(), start.getDate());
             const e = new Date(end.getFullYear(), end.getMonth(), end.getDate());
             return d >= s && d <= e;
         }
-
-        // ============================================
-        // FILTER EVENTS - Mobile Calendar checkbox filtering
-        // ============================================
 
         function filterEvents() {
             const checkboxes = document.querySelectorAll('.program-item input[type="checkbox"]');
@@ -953,10 +870,6 @@
             });
         }
 
-        // ============================================
-        // SEARCH - Mobile Calendar search functionality
-        // ============================================
-
         function searchPrograms() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             const programItems = document.querySelectorAll('.program-item');
@@ -970,10 +883,6 @@
                 }
             });
         }
-
-        // ============================================
-        // NAVIGATION - Mobile Calendar month switching
-        // ============================================
 
         function changeMonth(direction) {
             currentMonth += direction;
@@ -996,16 +905,7 @@
         }
 
         // ============================================
-        // BACK BUTTON - Adjustment for calendar context
-        // ============================================
-
-        document.getElementById('backBtn').addEventListener('click', () => {
-            // Navigate back or show alert
-            alert('Back to main navigation');
-        });
-
-        // ============================================
-        // INITIALIZATION - Mobile Calendar startup
+        // INITIALIZATION
         // ============================================
 
         // Initialize calendar to current month
